@@ -2,21 +2,22 @@ import os
 
 import pymysql
 from dotenv import load_dotenv
-
 from sql_utils import run_sql_file
 
 
 class Database:
     def __init__(self):
         """
-            Chargez les variables d'environnement de votre fichier .env, puis complétez les lignes 15 à 19 afin de récupérer les valeurs de ces variables
+            Chargez les variables d'environnement de votre fichier ..env, puis complétez les lignes 15 à 19 afin de
+            récupérer les valeurs de ces variables
         """
+        load_dotenv()
 
-        self.host =
-        self.port =
-        self.database =
-        self.user =
-        self.password =
+        self.host = os.environ.get("HOST")
+        self.port = int(os.environ.get("PORT"))
+        self.database = os.environ.get("DATABASE")
+        self.user = os.environ.get("USER")
+        self.password = os.environ.get("PASSWORD")
 
         self._open_sql_connection()
 
@@ -59,7 +60,8 @@ class Database:
         self.migration_counter = 0
 
     def get_table_names(self):
-        req = f"SELECT table_name FROM INFORMATION_SCHEMA.TABLES WHERE table_type = 'BASE TABLE' AND table_schema = '{self.database}';"
+        req = (f"SELECT table_name FROM INFORMATION_SCHEMA.TABLES WHERE table_type = 'BASE TABLE' "
+               f"AND table_schema = '{self.database}';")
         self.cursor.execute(req)
 
         res = [x[0] for x in self.cursor.fetchall()]
@@ -67,7 +69,8 @@ class Database:
         return res
 
     def get_table_column_names(self, table):
-        req = f"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table}' AND TABLE_SCHEMA = '{self.database}' ORDER BY ORDINAL_POSITION;"
+        req = (f"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{table}' "
+               f"AND TABLE_SCHEMA = '{self.database}' ORDER BY ORDINAL_POSITION;")
         self.cursor.execute(req)
 
         res = [x[0] for x in self.cursor.fetchall()]
@@ -81,13 +84,16 @@ class Database:
         return [list(x) for x in self.cursor.fetchall()]
 
     def get_table_primary_key(self, table):
-        req = f"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE TABLE_SCHEMA = '{self.database}' AND TABLE_NAME = '{table}' AND CONSTRAINT_NAME = 'PRIMARY';"
+        req = (f"SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE TABLE_SCHEMA = '{self.database}' "
+               f"AND TABLE_NAME = '{table}' AND CONSTRAINT_NAME = 'PRIMARY';")
         self.cursor.execute(req)
 
         return self.cursor.fetchone()
 
     def get_table_foreign_keys(self, table):
-        req = f"SELECT COLUMN_NAME,REFERENCED_TABLE_NAME,REFERENCED_COLUMN_NAME FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE TABLE_SCHEMA = '{self.database}' AND TABLE_NAME = '{table}' AND CONSTRAINT_NAME != 'PRIMARY';"
+        req = (f"SELECT COLUMN_NAME,REFERENCED_TABLE_NAME,REFERENCED_COLUMN_NAME "
+               f"FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE TABLE_SCHEMA = '{self.database}' "
+               f"AND TABLE_NAME = '{table}' AND CONSTRAINT_NAME != 'PRIMARY';")
         self.cursor.execute(req)
 
         foreign_keys = []

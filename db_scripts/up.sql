@@ -15,6 +15,6 @@ CREATE TABLE IF NOT EXISTS album (      albumName varchar(50),
                                         CONSTRAINT FK_A_singerName FOREIGN KEY (singerName) REFERENCES singer (singerName),
                                         FOREIGN KEY (labelName) REFERENCES label (labelName));
 
-INSERT INTO singer VALUES ("Alina", "Darcy", "Boles", 32), ("Mysterio","Jessie","Chancey",23), ("Rainbow", "Sarah", "Derrick", 47), ("Luna", "Emily", "Seibold", 31);
-INSERT INTO label VALUES ("World Music", 2002, "pop"), ("Dark Matter", 2015, "rock"), ("Four Seasons", 1999, "classical");
-INSERT INTO album VALUES ("World of Mysteries", "Mysterio", 2019, "Dark Matter"), ("Second Mystery", "Mysterio", 2021, "World Music"), ("Concertos", "Luna", 2009, "Four Seasons");
+INSERT INTO singer VALUES ('Alina', 'Darcy', 'Boles', 32), ('Mysterio','Jessie','Chancey',23), ('Rainbow', 'Sarah', 'Derrick', 47), ('Luna', 'Emily', 'Seibold', 31);
+INSERT INTO label VALUES ('World Music', 2002, 'pop'), ('Dark Matter', 2015, 'rock'), ('Four Seasons', 1999, 'classical');
+INSERT INTO album VALUES ('World of Mysteries', 'Mysterio', 2019, 'Dark Matter'), ('Second Mystery', 'Mysterio', 2021, 'World Music'), ('Concertos', 'Luna', 2009, 'Four Seasons');
